@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run:
 # Dynamic Electric Pricing Prediction
 
-![Dynamic Electric Pricing Prediction](screenshot.png)  <!-- Replace with the actual path to your image -->
+![Dynamic Electric Pricing Prediction](image.png)  <!-- Replace with the actual path to your image -->
 
 This project, hosted at [Electricity Management](https://electricity-management.vercel.app/), is a dynamic electricity pricing prediction platform. It leverages machine learning to forecast electricity prices, allowing users to optimize their energy consumption based on real-time data.
 
