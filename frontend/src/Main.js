@@ -14,7 +14,7 @@ const batteryData = async () => {
   return fetchedData;
 };
 
-let dummyPriceData; // Declare variable to store the data
+let dummyPriceData = []; // Declare variable to store the data
 let battery = 100;
 const main = async () => {
   dummyPriceData = await data();
@@ -58,7 +58,13 @@ const ElectricityManagement = () => {
       );
       // first fetch for the current time, if not available then fetch for the current hour
       const priceData = currentData || dummyPriceData[currentHour];
-      setCurrentPrice(currentData?.price || dummyPriceData[currentHour]?.price);
+      setCurrentPrice(
+        (
+          (currentData?.price || dummyPriceData[currentHour]?.price) +
+          -0.1 * Math.random() +
+          0.1 * Math.random()
+        ).toFixed(2)
+      );
 
       // Check next hour's price for notifications
       const nextHour = (currentHour + 1) % 24;

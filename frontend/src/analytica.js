@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Calendar } from "lucide-react";
 import {
   LineChart,
@@ -9,20 +9,16 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine
-} from 'recharts';
+  ReferenceLine,
+} from "recharts";
 
 // Custom Card Components
 const Card = ({ children, className = "" }) => (
-  <div className={`bg-white rounded-lg ${className}`}>
-    {children}
-  </div>
+  <div className={`bg-white rounded-lg ${className}`}>{children}</div>
 );
 
 const CardHeader = ({ children, className = "" }) => (
-  <div className={`p-6 ${className}`}>
-    {children}
-  </div>
+  <div className={`p-6 ${className}`}>{children}</div>
 );
 
 const CardTitle = ({ children, className = "" }) => (
@@ -32,15 +28,13 @@ const CardTitle = ({ children, className = "" }) => (
 );
 
 const CardContent = ({ children }) => (
-  <div className="p-6 pt-0">
-    {children}
-  </div>
+  <div className="p-6 pt-0">{children}</div>
 );
 
 // Custom Select Components
 const Select = ({ value, onValueChange, children }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   return (
     <div className="relative">
       <div
@@ -52,12 +46,12 @@ const Select = ({ value, onValueChange, children }) => {
       </div>
       {isOpen && (
         <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
-          {React.Children.map(children, child =>
+          {React.Children.map(children, (child) =>
             React.cloneElement(child, {
               onSelect: (value) => {
                 onValueChange(value);
                 setIsOpen(false);
-              }
+              },
             })
           )}
         </div>
@@ -76,22 +70,38 @@ const SelectItem = ({ value, children, onSelect }) => (
 );
 
 const EnergyAnalytics = () => {
-  const [timeRange, setTimeRange] = useState('monthly');
-  const [selectedYear, setSelectedYear] = useState('2024');
-  
+  const [timeRange, setTimeRange] = useState("monthly");
+  const [selectedYear, setSelectedYear] = useState("2024");
+
   // Dummy data generators for different time periods
   const generateDailyData = (year, month) => {
     const days = new Date(year, month, 0).getDate();
+    const currentHourNum = new Date().getHours();
     return Array.from({ length: 24 }, (_, i) => ({
       day: `${i + 1}`,
-      gridEnergy: Math.floor(5 + Math.random() * 2.5),
-      solarEnergy: Math.floor(3.75 + Math.random() * 3.75),
+      gridEnergy:
+        i >= currentHourNum ? null : Math.floor(5 + Math.random() * 2.5),
+      solarEnergy:
+        i >= currentHourNum ? null : Math.floor(3.75 + Math.random() * 3.75),
     }));
   };
 
   const generateMonthlyData = (year) => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months.map(month => ({
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return months.map((month) => ({
       month,
       gridEnergy: Math.floor(125 + Math.random() * 75),
       solarEnergy: Math.floor(100 + Math.random() * 100),
@@ -99,7 +109,7 @@ const EnergyAnalytics = () => {
   };
 
   const generateYearlyData = () => {
-    return ['2020', '2021', '2022', '2023', '2024'].map(year => ({
+    return ["2020", "2021", "2022", "2023", "2024"].map((year) => ({
       year,
       gridEnergy: Math.floor(1500 + Math.random() * 500),
       solarEnergy: Math.floor(1250 + Math.random() * 750),
@@ -110,28 +120,38 @@ const EnergyAnalytics = () => {
   const dataMapping = {
     daily: generateDailyData(2024, 3),
     monthly: generateMonthlyData(selectedYear),
-    yearly: generateYearlyData()
+    yearly: generateYearlyData(),
   };
 
   const energyData = dataMapping[timeRange];
 
   // Calculate costs and metrics
-  const costData = energyData.map(entry => {
+  const costData = energyData.map((entry) => {
     const timeKey = entry.day || entry.month || entry.year;
-    const gridOnlyCost = (entry.gridEnergy + entry.solarEnergy) * 10;
+    // console.log({gridEnergy:entry.gridEnergy});
+
+    const gridOnlyCost =
+      entry.gridEnergy && entry.solarEnergy
+        ? (entry.gridEnergy + entry.solarEnergy) * 10
+        : null;
     const hybridCost = entry.gridEnergy * 10;
     const savings = gridOnlyCost - hybridCost;
-    
-    return {
-      timeKey,
-      gridOnlyCost,
-      hybridCost,
-      savings
-    };
+
+    return entry.gridEnergy && entry.solarEnergy
+      ? {
+          timeKey,
+          gridOnlyCost,
+          hybridCost,
+          savings,
+        }
+      : { timeKey };
   });
 
   // Calculate summary statistics
-  const totalSolarEnergy = energyData.reduce((sum, entry) => sum + entry.solarEnergy, 0);
+  const totalSolarEnergy = energyData.reduce(
+    (sum, entry) => sum + entry.solarEnergy,
+    0
+  );
   const excessSolar = totalSolarEnergy * 0.1;
   const currentSolarRate = 5.25;
   const gridSellbackRate = 3.5;
@@ -144,7 +164,9 @@ const EnergyAnalytics = () => {
           <p className="font-semibold">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
-              {`${entry.name}: ${entry.value.toFixed(2)} ${entry.name.includes('Cost') ? '₹' : 'kWh'}`}
+              {`${entry.name}: ${entry.value.toFixed(2)} ${
+                entry.name.includes("Cost") ? "₹" : "kWh"
+              }`}
             </p>
           ))}
         </div>
@@ -165,11 +187,13 @@ const EnergyAnalytics = () => {
             <SelectItem value="yearly">Yearly</SelectItem>
           </Select>
         </div>
-        
-        {timeRange === 'monthly' && (
+
+        {timeRange === "monthly" && (
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            {['2020', '2021', '2022', '2023', '2024'].map(year => (
-              <SelectItem key={year} value={year}>{year}</SelectItem>
+            {["2020", "2021", "2022", "2023", "2024"].map((year) => (
+              <SelectItem key={year} value={year}>
+                {year}
+              </SelectItem>
             ))}
           </Select>
         )}
@@ -178,40 +202,53 @@ const EnergyAnalytics = () => {
       {/* Energy Usage Graph */}
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50">
-          <CardTitle className="text-xl font-bold">Energy Usage Over Time</CardTitle>
+          <CardTitle className="text-xl font-bold">
+            Energy Usage Over Time
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={energyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis 
-                  dataKey={timeRange === 'daily' ? 'day' : timeRange === 'monthly' ? 'month' : 'year'}
-                  tick={{ fill: '#666' }}
+                <XAxis
+                  dataKey={
+                    timeRange === "daily"
+                      ? "day"
+                      : timeRange === "monthly"
+                      ? "month"
+                      : "year"
+                  }
+                  tick={{ fill: "#666" }}
                 />
-                <YAxis 
-                  label={{ value: 'Energy (kWh)', angle: -90, position: 'insideLeft', fill: '#666' }}
-                  tick={{ fill: '#666' }}
+                <YAxis
+                  label={{
+                    value: "Energy (kWh)",
+                    angle: -90,
+                    position: "insideLeft",
+                    fill: "#666",
+                  }}
+                  tick={{ fill: "#666" }}
                 />
                 <Tooltip content={renderCustomTooltip} />
                 <Legend />
                 <ReferenceLine y={0} stroke="#666" />
-                <Line 
-                  type="monotone" 
-                  dataKey="gridEnergy" 
-                  stroke="#6366f1" 
+                <Line
+                  type="monotone"
+                  dataKey="gridEnergy"
+                  stroke="#6366f1"
                   strokeWidth={2}
                   name="Grid Energy"
-                  dot={{ stroke: '#6366f1', strokeWidth: 2, r: 4 }}
+                  dot={{ stroke: "#6366f1", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="solarEnergy" 
+                <Line
+                  type="monotone"
+                  dataKey="solarEnergy"
                   stroke="#22c55e"
                   strokeWidth={2}
                   name="Solar Energy"
-                  dot={{ stroke: '#22c55e', strokeWidth: 2, r: 4 }}
+                  dot={{ stroke: "#22c55e", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
               </LineChart>
@@ -223,49 +260,53 @@ const EnergyAnalytics = () => {
       {/* Cost Comparison Graph */}
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="bg-gradient-to-r from-orange-50 to-blue-50">
-          <CardTitle className="text-xl font-bold">Cost Comparison Over Time</CardTitle>
+          <CardTitle className="text-xl font-bold">
+            Cost Comparison Over Time
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={costData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis 
-                  dataKey="timeKey"
-                  tick={{ fill: '#666' }}
-                />
-                <YAxis 
-                  label={{ value: 'Cost (₹)', angle: -90, position: 'insideLeft', fill: '#666' }}
-                  tick={{ fill: '#666' }}
+                <XAxis dataKey="timeKey" tick={{ fill: "#666" }} />
+                <YAxis
+                  label={{
+                    value: "Cost (₹)",
+                    angle: -90,
+                    position: "insideLeft",
+                    fill: "#666",
+                  }}
+                  tick={{ fill: "#666" }}
                 />
                 <Tooltip content={renderCustomTooltip} />
                 <Legend />
                 <ReferenceLine y={0} stroke="#666" />
-                <Line 
-                  type="monotone" 
-                  dataKey="gridOnlyCost" 
+                <Line
+                  type="monotone"
+                  dataKey="gridOnlyCost"
                   stroke="#f97316"
                   strokeWidth={2}
                   name="Grid Only Cost"
-                  dot={{ stroke: '#f97316', strokeWidth: 2, r: 4 }}
+                  dot={{ stroke: "#f97316", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="hybridCost" 
+                <Line
+                  type="monotone"
+                  dataKey="hybridCost"
                   stroke="#059669"
                   strokeWidth={2}
                   name="Hybrid System Cost"
-                  dot={{ stroke: '#059669', strokeWidth: 2, r: 4 }}
+                  dot={{ stroke: "#059669", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="savings" 
+                <Line
+                  type="monotone"
+                  dataKey="savings"
                   stroke="#2563eb"
                   strokeWidth={2}
                   name="Savings"
-                  dot={{ stroke: '#2563eb', strokeWidth: 2, r: 4 }}
+                  dot={{ stroke: "#2563eb", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
               </LineChart>
@@ -281,8 +322,12 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Excess Solar Energy</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">{excessSolar.toFixed(2)} kWh</p>
-            <p className="text-sm text-gray-600 mt-1">Available for grid sellback</p>
+            <p className="text-2xl font-bold text-green-600">
+              {excessSolar.toFixed(2)} kWh
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              Available for grid sellback
+            </p>
           </CardContent>
         </Card>
 
@@ -291,8 +336,12 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Current Solar Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-blue-600">₹{currentSolarRate.toFixed(2)}/kWh</p>
-            <p className="text-sm text-gray-600 mt-1">Current generation cost</p>
+            <p className="text-2xl font-bold text-blue-600">
+              ₹{currentSolarRate.toFixed(2)}/kWh
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              Current generation cost
+            </p>
           </CardContent>
         </Card>
 
@@ -301,7 +350,9 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Grid Sellback Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-purple-600">₹{gridSellbackRate.toFixed(2)}/kWh</p>
+            <p className="text-2xl font-bold text-purple-600">
+              ₹{gridSellbackRate.toFixed(2)}/kWh
+            </p>
             <p className="text-sm text-gray-600 mt-1">Current buyback rate</p>
           </CardContent>
         </Card>
@@ -311,8 +362,12 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Potential Profit</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">₹{potentialProfit.toFixed(2)}</p>
-            <p className="text-sm text-gray-600 mt-1">From excess energy sales</p>
+            <p className="text-2xl font-bold text-green-600">
+              ₹{potentialProfit.toFixed(2)}
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              From excess energy sales
+            </p>
           </CardContent>
         </Card>
       </div>
