@@ -82,10 +82,10 @@ const EnergyAnalytics = () => {
   // Dummy data generators for different time periods
   const generateDailyData = (year, month) => {
     const days = new Date(year, month, 0).getDate();
-    return Array.from({ length: days }, (_, i) => ({
+    return Array.from({ length: 24 }, (_, i) => ({
       day: `${i + 1}`,
-      gridEnergy: Math.floor(20 + Math.random() * 10),
-      solarEnergy: Math.floor(15 + Math.random() * 15),
+      gridEnergy: Math.floor(5 + Math.random() * 2.5),
+      solarEnergy: Math.floor(3.75 + Math.random() * 3.75),
     }));
   };
 
@@ -93,16 +93,16 @@ const EnergyAnalytics = () => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return months.map(month => ({
       month,
-      gridEnergy: Math.floor(500 + Math.random() * 300),
-      solarEnergy: Math.floor(400 + Math.random() * 400),
+      gridEnergy: Math.floor(125 + Math.random() * 75),
+      solarEnergy: Math.floor(100 + Math.random() * 100),
     }));
   };
 
   const generateYearlyData = () => {
     return ['2020', '2021', '2022', '2023', '2024'].map(year => ({
       year,
-      gridEnergy: Math.floor(6000 + Math.random() * 2000),
-      solarEnergy: Math.floor(5000 + Math.random() * 3000),
+      gridEnergy: Math.floor(1500 + Math.random() * 500),
+      solarEnergy: Math.floor(1250 + Math.random() * 750),
     }));
   };
 
@@ -118,8 +118,8 @@ const EnergyAnalytics = () => {
   // Calculate costs and metrics
   const costData = energyData.map(entry => {
     const timeKey = entry.day || entry.month || entry.year;
-    const gridOnlyCost = (entry.gridEnergy + entry.solarEnergy) * 0.15;
-    const hybridCost = entry.gridEnergy * 0.15;
+    const gridOnlyCost = (entry.gridEnergy + entry.solarEnergy) * 10;
+    const hybridCost = entry.gridEnergy * 10;
     const savings = gridOnlyCost - hybridCost;
     
     return {
@@ -132,9 +132,9 @@ const EnergyAnalytics = () => {
 
   // Calculate summary statistics
   const totalSolarEnergy = energyData.reduce((sum, entry) => sum + entry.solarEnergy, 0);
-  const excessSolar = totalSolarEnergy * 0.2;
-  const currentSolarRate = 0.12;
-  const gridSellbackRate = 0.08;
+  const excessSolar = totalSolarEnergy * 0.1;
+  const currentSolarRate = 5.25;
+  const gridSellbackRate = 3.5;
   const potentialProfit = excessSolar * gridSellbackRate;
 
   const renderCustomTooltip = ({ active, payload, label }) => {
@@ -144,7 +144,7 @@ const EnergyAnalytics = () => {
           <p className="font-semibold">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
-              {`${entry.name}: ${entry.value.toFixed(2)} ${entry.name.includes('Cost') ? '$' : 'kWh'}`}
+              {`${entry.name}: ${entry.value.toFixed(2)} ${entry.name.includes('Cost') ? '₹' : 'kWh'}`}
             </p>
           ))}
         </div>
@@ -235,7 +235,7 @@ const EnergyAnalytics = () => {
                   tick={{ fill: '#666' }}
                 />
                 <YAxis 
-                  label={{ value: 'Cost ($)', angle: -90, position: 'insideLeft', fill: '#666' }}
+                  label={{ value: 'Cost (₹)', angle: -90, position: 'insideLeft', fill: '#666' }}
                   tick={{ fill: '#666' }}
                 />
                 <Tooltip content={renderCustomTooltip} />
@@ -291,7 +291,7 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Current Solar Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-blue-600">${currentSolarRate.toFixed(2)}/kWh</p>
+            <p className="text-2xl font-bold text-blue-600">₹{currentSolarRate.toFixed(2)}/kWh</p>
             <p className="text-sm text-gray-600 mt-1">Current generation cost</p>
           </CardContent>
         </Card>
@@ -301,7 +301,7 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Grid Sellback Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-purple-600">${gridSellbackRate.toFixed(2)}/kWh</p>
+            <p className="text-2xl font-bold text-purple-600">₹{gridSellbackRate.toFixed(2)}/kWh</p>
             <p className="text-sm text-gray-600 mt-1">Current buyback rate</p>
           </CardContent>
         </Card>
@@ -311,7 +311,7 @@ const EnergyAnalytics = () => {
             <CardTitle className="text-lg">Potential Profit</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">${potentialProfit.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-green-600">₹{potentialProfit.toFixed(2)}</p>
             <p className="text-sm text-gray-600 mt-1">From excess energy sales</p>
           </CardContent>
         </Card>

@@ -74,7 +74,7 @@ const ApplianceRow = ({ icon: Icon, name, power, optimizedPower, savings }) => {
           <div className="bg-green-50 rounded-lg p-4 space-y-2">
             <div className="font-medium text-green-800">Optimization Insights</div>
             <div className="text-green-700">
-              • Potential savings of ${savings.toFixed(2)} per month ({percentageSaved}% reduction)
+              • Potential savings of ₹{savings.toFixed(2)} per month ({percentageSaved}% reduction)
             </div>
             <div className="text-green-700">
               • Recommended usage: Off-peak hours (10 PM - 6 AM)
@@ -104,7 +104,7 @@ const SolarStats = ({ solarData }) => {
         <div className="bg-blue-50 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Download className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-800">Grid Usage</span>
+            <span className="text-sm font-medium text-blue-800">Consumption</span>
           </div>
           <div className="text-2xl font-semibold text-blue-600">{solarData.gridUsage} kW</div>
           <div className="text-sm text-blue-600">Daily: {solarData.dailyGridUsage} kWh</div>
@@ -131,9 +131,9 @@ const Dashboard = () => {
   const [showTips, setShowTips] = useState(false);
 
   const energyData = {
-    currentUsage: 856,
-    optimizedUsage: 642,
-    monthlySavings: 72.50,
+    currentUsage: 321,
+    optimizedUsage: 249,
+    monthlySavings: 576,
     peakHours: '2 PM - 8 PM',
     offPeakHours: '10 PM - 6 AM',
     carbonFootprint: '320 kg CO2',
@@ -141,10 +141,10 @@ const Dashboard = () => {
   };
 
   const solarData = {
-    currentProduction: 4.2,
-    dailyProduction: 28.5,
-    gridUsage: 1.8,
-    dailyGridUsage: 14.2,
+    currentProduction: 234,
+    dailyProduction: 7.8,
+    gridUsage: 72,
+    dailyGridUsage: 2.4,
     hourlyData: [
       { hour: '6 AM', production: 0.2, consumption: 1.5 },
       { hour: '8 AM', production: 2.1, consumption: 2.2 },
@@ -158,11 +158,11 @@ const Dashboard = () => {
   };
 
   const appliances = [
-    { icon: Waves, name: 'Washing Machine', power: 2.8, optimizedPower: 1.9, savings: 12.60 },
-    { icon: Laptop, name: 'Home Office', power: 3.2, optimizedPower: 2.4, savings: 9.80 },
-    { icon: ShowerHead, name: 'Water Heater', power: 4.5, optimizedPower: 3.2, savings: 18.20 },
-    { icon: Tv, name: 'Entertainment', power: 2.1, optimizedPower: 1.6, savings: 7.40 },
-    { icon: Home, name: 'HVAC System', power: 8.4, optimizedPower: 6.1, savings: 24.50 }
+    { icon: Waves, name: 'Washing Machine', power: 15.2, optimizedPower: 10.3, savings: 589 },
+    { icon: Laptop, name: 'Air Conditioner', power: 93, optimizedPower: 69.7, savings: 2790 },
+    { icon: ShowerHead, name: 'Water Heater', power: 17.6, optimizedPower: 12.5, savings: 612 },
+    { icon: Tv, name: 'Entertainment', power: 27.6, optimizedPower: 21, savings: 792 },
+    { icon: Home, name: 'HVAC System', power: 80.5, optimizedPower: 58.4, savings: 7013 }
   ];
 
   return (
@@ -237,7 +237,7 @@ const Dashboard = () => {
               <CircleDollarSign className="w-5 h-5 text-purple-500" />
               <h3 className="font-medium">Potential Savings</h3>
             </div>
-            <span className="text-2xl font-semibold text-purple-600">${energyData.monthlySavings}</span>
+            <span className="text-2xl font-semibold text-purple-600">₹{energyData.monthlySavings}</span>
           </div>
           <div className="text-sm text-gray-500">
             Per month
