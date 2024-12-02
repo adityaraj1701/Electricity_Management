@@ -1,5 +1,7 @@
 const fetchBattery = async () => {
-  const data = await fetch("http://localhost:5000/battery");
+  const data = await fetch(
+    "https://electricity-management-n46q.onrender.com/battery"
+  );
   const jsonData = await data.json();
   const battery = jsonData.battery;
   console.log({ battery });
