@@ -44,7 +44,7 @@ const Forecasting = () => {
       weather: 'Partly Cloudy',
       temperature: '22°C',
       solarProduction: '1.2 kWh',
-      tariffs: '£0.15/kWh',
+      tariffs: '₹8.8/kWh',
       recommendations: 'Consider running high-consumption appliances after sunset',
     },
     'next-day': {
@@ -52,7 +52,7 @@ const Forecasting = () => {
       weather: 'Sunny',
       temperature: '24°C',
       solarProduction: '15.5 kWh',
-      tariffs: '£0.18/kWh peak, £0.12/kWh off-peak',
+      tariffs: '₹8.9/kWh peak, ₹6.2/kWh off-peak',
       recommendations: 'Optimal day for laundry during solar peak hours',
     },
     'next-week': {
@@ -60,7 +60,7 @@ const Forecasting = () => {
       weather: 'Mixed',
       temperature: '23°C',
       solarProduction: '95.5 kWh',
-      tariffs: '£0.17/kWh average',
+      tariffs: '₹9.1/kWh average',
       recommendations: 'Plan high-energy activities for forecasted sunny days',
     },
     'next-month': {
@@ -68,7 +68,7 @@ const Forecasting = () => {
       weather: 'Seasonal',
       temperature: '21°C',
       solarProduction: '380 kWh',
-      tariffs: '£0.16/kWh average',
+      tariffs: '₹8.6/kWh average',
       recommendations: 'Consider scheduling maintenance for optimal efficiency',
     }
   };

@@ -14,10 +14,35 @@ const batteryData = async () => {
   return fetchedData;
 };
 
-let dummyPriceData = []; // Declare variable to store the data
+let dummyPriceData = [
+  { time: "00:00", price: 4.5 },
+  { time: "01:00", price: 3.6 },
+  { time: "02:00", price: 3.0 },
+  { time: "03:00", price: 3.3 },
+  { time: "04:00", price: 3.9 },
+  { time: "05:00", price: 5.4 },
+  { time: "06:00", price: 6.6 },
+  { time: "07:00", price: 8.4 },
+  { time: "08:00", price: 10.5 },
+  { time: "09:00", price: 12.0 },
+  { time: "10:00", price: 11.4 },
+  { time: "11:00", price: 10.5 },
+  { time: "12:00", price: 9.6 },
+  { time: "13:00", price: 9.0 },
+  { time: "14:00", price: 8.4 },
+  { time: "15:00", price: 7.5 },
+  { time: "16:00", price: 8.1 },
+  { time: "17:00", price: 9.6 },
+  { time: "18:00", price: 11.4 },
+  { time: "19:00", price: 10.5 },
+  { time: "20:00", price: 9.0 },
+  { time: "21:00", price: 7.5 },
+  { time: "22:00", price: 6.0 },
+  { time: "23:00", price: 5.4 },
+];
 let battery = 100;
 const main = async () => {
-  dummyPriceData = await data();
+  const dummYPriceData = await data();
   console.log("Dummy Price Data:", dummyPriceData); // Log after assignment
   battery = await batteryData();
   console.log({ battery: battery });
@@ -57,10 +82,10 @@ const ElectricityManagement = () => {
         (data) => data.time === currentTime
       );
       // first fetch for the current time, if not available then fetch for the current hour
-      const priceData = currentData || dummyPriceData[currentHour];
+      const priceData = dummyPriceData[currentHour];
       setCurrentPrice(
         (
-          (currentData?.price || dummyPriceData[currentHour]?.price) +
+          dummyPriceData[currentHour]?.price +
           -0.1 * Math.random() +
           0.1 * Math.random()
         ).toFixed(2)
@@ -68,6 +93,8 @@ const ElectricityManagement = () => {
 
       // Check next hour's price for notifications
       const nextHour = (currentHour + 1) % 24;
+      console.log({ priceData });
+
       const nextPrice = dummyPriceData[nextHour];
       const currentIsHigh = priceData.price > 8;
       const nextIsHigh = nextPrice.price > 8;

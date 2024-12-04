@@ -77,8 +77,8 @@ const EnergyAnalytics = () => {
   const generateDailyData = (year, month) => {
     const days = new Date(year, month, 0).getDate();
     const currentHourNum = new Date().getHours();
-    return Array.from({ length: 24 }, (_, i) => ({
-      day: `${i + 1}`,
+    return Array.from({ length: 24+1 }, (_, i) => ({
+      day: `${i }`,
       gridEnergy:
         i >= currentHourNum ? null : Math.floor(5 + Math.random() * 2.5),
       solarEnergy:
